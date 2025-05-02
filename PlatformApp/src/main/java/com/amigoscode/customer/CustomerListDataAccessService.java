@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class CustomerDataAccessService implements CustomerDao{
+@Repository("list")
+public class CustomerListDataAccessService implements CustomerDao {
 
-    private static List<Customer> customers;
+    // db
+    private static final List<Customer> customers;
 
     static {
         customers = new ArrayList<>();
@@ -18,15 +19,16 @@ public class CustomerDataAccessService implements CustomerDao{
                 1,
                 "Alex",
                 "alex@gmail.com",
-                25
+                21
         );
+        customers.add(alex);
+
         Customer jamila = new Customer(
                 2,
                 "Jamila",
                 "jamila@gmail.com",
-                25
+                19
         );
-        customers.add(alex);
         customers.add(jamila);
     }
 
@@ -40,6 +42,17 @@ public class CustomerDataAccessService implements CustomerDao{
         return customers.stream()
                 .filter(c -> c.getId().equals(id))
                 .findFirst();
-
     }
+
+    @Override
+    public void insertCustomer(Customer customer) {
+        customers.add(customer);
+    }
+
+    @Override
+    public boolean existsPersonWithEmail(String email) {
+        return customers.stream()
+                .anyMatch(c -> c.getEmail().equals(email));
+    }
+
 }
